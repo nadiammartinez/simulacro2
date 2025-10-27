@@ -61,6 +61,14 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db  = scope.ServiceProvider.GetRequiredService<Simulacro2.Data.AppDbContext>();
+    var pwd = scope.ServiceProvider.GetRequiredService<Simulacro2.Services.PasswordService>();
+    var cfg = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    Simulacro2.Data.DbSeeder.SeedAdmin(db, pwd, cfg);
+}
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
